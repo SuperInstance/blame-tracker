@@ -55,6 +55,15 @@ The splice-based approach avoids rebuilding the entire map — only the shifted 
 
 After any operation, `lines[i].line_number == i + 1` for all `i`. This is maintained by the post-splice renumber loop.
 
+### Comparison with Git Blame
+
+| Approach | Write Cost | Query Cost | Memory |
+|----------|-----------|------------|--------|
+| Forward maintenance (this crate) | O(L) per edit | O(1) | O(L) |
+| Retroactive diff (git blame) | O(1) (snapshot) | O(L × H) | O(L × H) |
+
+Where H = history depth. The forward approach is superior for read-heavy workloads (IDE annotations, audit dashboards) where blame queries vastly outnumber edits.
+
 ## Quick Start
 
 ```rust
